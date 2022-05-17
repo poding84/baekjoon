@@ -9,8 +9,6 @@
 
 나머지 한 원소를 결정하는 방법은 -i의 lowerbound를 찾아서, lowerbound와 lowerbound-1 원소중 합이 0과 가까운 원소를 선택하면 된다.
 
-### 시간복잡도
+### 시간복잡도 : NlogN
 
 모든 원소 (N)에 대해서 각각 lowerbound를 계산(log N)함.
-
-NlogN
