@@ -6,54 +6,55 @@ char a[1010];
 char b[1010];
 
 int dp[1010][1010];
+pair<int, int> nextchar[1010][1010];
+int len_a, len_b;
 
-pair<int, string> getLCS(int ea, int eb) {
-	string s;
-	if (ea == 0) {
-		if (eb == 0) {
-			if (a[ea] == b[eb]) {
-				s += a[ea];
-				return {1, s};
-			}
-			return {0, ""};
-		}
-		else {
-			
-			for(int i=eb; i>=0; i--) {
-				if (b[i] == a[ea]) {
-					s += a[ea];
-					return {1, s};
-				}
-			}
-			return {0, ""};
-		}
-		
-		
+int sum;
+
+int getLCS(int ea, int eb) {
+	//printf("%d %d\n", ea, eb);
+	//sum += 1;
+	if (ea >= len_a) {
+		return 0;
+	}
+	if (eb >= len_b) {
+		return 0;
 	}
 	
-	if (eb == 0) {
-		if (ea == 0) {
-			if (a[ea] == b[eb]) {
-				s += a[ea];
-				return {1, s};
-			}
-			return {0, ""};
-		}
-		else {
-			
-			for(int i=ea; i>=0; i--) {
-				if (a[i] == b[eb]) {
-					s += b[eb];
-					return {1, s};
-				}
-			}
-			return {0, ""};
-		}
-		
-		
+	
+	
+	
+	int x, y;
+	
+	if (dp[ea][eb] != -1 ) {
+		return dp[ea][eb];
 	}
 	
-	return {5, "asdf"};
+	if (a[ea] == b[eb])  {
+		dp[ea][eb] = getLCS(ea+1, eb+1) + 1;
+		nextchar[ea][eb] = {ea+1, eb+1};
+		return dp[ea][eb];
+	}
+	else {
+		x = getLCS(ea+1, eb);	
+		y = getLCS(ea, eb+1);
+	}
+	
+	
+	
+	
+	
+	
+	if (x>y) {
+		dp[ea][eb] = x;
+		nextchar[ea][eb] = {ea+1, eb};
+	}
+	else {
+		dp[ea][eb] = y;
+		nextchar[ea][eb] = {ea, eb+1};
+	}
+	
+	return dp[ea][eb];
 	
 	
 }
@@ -64,8 +65,45 @@ int main() {
 	scanf("%s", a);
 	scanf("%s", b);
 	
+	len_a = strlen(a);
+	len_b = strlen(b);	
 	
-	pair<int, string> p = getLCS(strlen(a)-1, strlen(b)-1);
-	printf("%d\n%s", p.first, p.second.c_str());
+	for(int i=0; i<=1005; i++) {
+		for(int j=0; j<=1005; j++) {
+			dp[i][j] = -1;
+		}
+	}
+	
+	
+	int p = getLCS(0, 0);
+	printf("%d", p);
+	
+	if (p>0) {
+		printf("\n");
+		if (a[0] == b[0]) {
+			printf("%c", a[0]);
+		}
+		int i = nextchar[0][0].first;
+		int j = nextchar[0][0].second;
+		while(true) {
+			if (i == 0 && j == 0) {
+				break;
+			}
+			
+			if (a[i] == b[j]) {
+				printf("%c", a[i]);
+			}
+			
+			pair<int, int> temp = nextchar[i][j];
+			
+			i = temp.first;
+			j = temp.second;
+		}
+	}
+	
+	
+	
+	
+//	printf("\n%d", sum);
 	
 }
