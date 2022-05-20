@@ -8,11 +8,11 @@ using namespace std;
 
 int N;
 int a[1000010];
+int index[1000010];
+
 
 vector<int> lis;
 
-vector<int> indexlis;
-vector<int> captureindex;
 
 
 int getIndex(int num) {
@@ -23,18 +23,21 @@ int getIndex(int num) {
 	
 }
 
-void capture() {
-	for(int i=lis.size() - 1; i>=0; i--) {
-		capturelis[i] = lis[i];
-		if (i == 0) {
-			break;
-		}
-		
-		if (capturelis[i-1] < capturelis[i]) {
-			break;
-		}
+void printlis(int ans) {
+	printf("\n");
+	for(int i=0; i<ans; i++) {
+		printf("%d ", lis[i]);
 	}
 }
+
+void printidx() {
+	printf("\n");
+	for(int i=0; i<N; i++) {
+		printf("%d ", index[i]);
+	}
+}
+
+
 
 int main() {
 	scanf("%d", &N);
@@ -44,43 +47,44 @@ int main() {
 	}
 	
 	lis.push_back(a[0]);
-	capturelis.push_back(a[0]);
+	
 	int ans = 1;
 	for(int i=1; i<N; i++ ) {
 		if (lis[ans-1] < a[i]) {
 			lis.push_back(a[i]);
-			indexlis.push_back(i);
+			index[i] = ans;
 			ans++;
 		}
 		else {
-			int index = getIndex(a[i]);
-			lis[index] = a[i];
-			if (index == ans - 1) {
-				capture();
-			}
+			int indexx = getIndex(a[i]);
+			lis[indexx] = a[i];
+			index[i] = indexx;
 			
 		}
-		
-		printf("\n------%d------\n", a[i]);
-		for(int i=0; i<ans; i++) {
-			printf("%d ", capturelis[i]);
-		}
-		
-		printf("\n");
-		for(int i=0; i<ans; i++) {
-			printf("%d ", lis[i]);
-		}
-		
-		
+//		printf("\n------%d------\n", a[i]);
+//		
+//		printlis(ans);
+//		printidx();
 	}
+	
 	
 	printf("%d", ans);
-	
-
 	printf("\n");
-	for(int i=0; i<ans; i++) {
-		printf("%d ", capturelis[i]);
+	vector<int> printans;
+	for(int i=N-1; i>=0; i--) {
+		if (ans == 0) {
+			break;
+		}
+		if (index[i] == ans-1) {
+			printans.push_back(a[i]);
+			ans--;
+		}
 	}
+	
+	for(int i=printans.size()-1; i>=0; i--) {
+		printf("%d ", printans[i]);
+	}
+	
 	
 	
 }
