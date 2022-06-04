@@ -7,18 +7,18 @@
 
 using namespace std;
 
-long long dp[110][11][11];
+int mod = 1000000000;
 
-long long ansfunc(int n) {
-	long long ans = 0;
-	for(int i=1; i<10; i++) {
-		for(int j=0; j<10; j++) {
-			ans += dp[n][i][j];
-		}
+int dp[101][1030][10];
+
+int sumprint(int x) {
+	int sum = 0;
+	for(int i=0; i<10; i++) {
+		sum += dp[x][1023][i];
+		sum %= 1000000000;
 	}
-	return ans;
+	return sum;
 }
-
 
 int main() {
 	
@@ -26,24 +26,29 @@ int main() {
 	
 	scanf("%d", &N);
 	
-	
-	dp[10][9][0] = 1;
-	dp[10][0][9] = 1;
-	for(int i=11; i<=N; i++) {
-		
+	if (N<10) {
+		printf("0");
+		return 0;
 	}
 	
+
 	
-	long long ans=0;
-	
-	for(int i=1; i<=40; i++) {
-		ans += ansfunc(i);
+	for(int i=1; i<10; i++) {
+		dp[1][1<<i][i] = 1;
 	}
 	
+	for(int i=2; i<=N; i++) {
+		for(int j=0; j<1024; j++) {
+			dp[i][j|(1<<0)][0] = (dp[i][j|(1<<0)][0] + dp[i-1][j][1] ) % mod;
+			for(int k=1; k<9; k++) {
+				dp[i][j|(1<<k)][k] = (dp[i][j|(1<<k)][k] + dp[i-1][j][k-1] ) % mod;
+				dp[i][j|(1<<k)][k] = (dp[i][j|(1<<k)][k] + dp[i-1][j][k+1] ) % mod;
+			}
+			dp[i][j|(1<<9)][9] = (dp[i][j|(1<<9)][9] + dp[i-1][j][8] ) % mod;
+		}
+	}
 	
-	printf("%lld", ans);
-	
-	
+	printf("%d", sumprint(N));
 	
 	
 }
