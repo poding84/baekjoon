@@ -33,12 +33,29 @@ int dist(int x,  int y) {
 	}
 }
 
+void printpower(int idx) {
+	for(int i=0; i<5; i++) {
+			for(int j=0; j<5; j++) {
+				printf("%d ", power[idx][i][j]);
+				
+			}
+			printf("\n");
+		}
+}
+
+int min(int a, int b) {
+	if (!a) return b;
+	return a>b?b:a;
+}
+
 int main() {
 	int idx = 0;
-	int before;
 	while(true) {
 		int a;
 		scanf("%d", &a);
+		if (a == 0) {
+			break;
+		}
 		if (idx == 0) {
 			power[0][0][a] = dist(0, a);
 			power[0][a][0] = dist(a, 0);
@@ -47,18 +64,37 @@ int main() {
 		}
 		
 		for(int i=0; i<5; i++) {
-			power[idx]
+			for(int j=0; j<5; j++) {
+				if (!power[idx-1][i][j]) continue;
+				
+				if (i != a) {
+					power[idx][i][a] = min(power[idx][i][a], power[idx-1][i][j] + dist(j, a));
+				}
+				
+				if (j != a) {
+					power[idx][a][j] = min(power[idx][a][j], power[idx-1][i][j] + dist(i, a));
+				}
+				
+			}
 		}
 		
-		for(int i=0; i<5; i++) {
-			
-		}
-		
-		
-		
+		//printpower(idx);
 		idx++;
 
 	}
+	if (idx == 0) {
+		printf("0");
+		return 0;
+	}
+	int min = 1e9;
+	for(int i=0; i<5; i++) {
+		for(int j=0; j<5; j++) {
+			
+			if (min > power[idx-1][i][j] && power[idx-1][i][j]) {
+				min = power[idx-1][i][j];
+			}
+		}
+	}
 	
-	
+	printf("%d", min);
 }
