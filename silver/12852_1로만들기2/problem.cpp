@@ -16,6 +16,7 @@ int main() {
 	
 	queue<int> q;
 	
+	
 	q.push(x);
 	
 	while(!q.empty()) {
